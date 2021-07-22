@@ -34,38 +34,34 @@ router.get('/:id', checkAccountId, (req, res, next) => {
     });
 });
 
-// router.post(
-//   '/',
-//   checkAccountPayload,
-//   checkAccountNameUnique,
-//   async (req, res, next) => {
-//     // DO YOUR MAGIC
-//     try {
-//       const data = await Accounts.create({
-//         name: req.body.name,
-//         budget: req.body.budget,
-//       });
-//       res.json(data);
-//     } catch (err) {
-//       next(err);
-//     }
-//   }
-// );
-
 router.post(
   '/',
   checkAccountPayload,
   checkAccountNameUnique,
-  (req, res, next) => {
-    // DO YOUR MAGIC
-    Accounts.create(req.body)
-      .then((newAccount) => res.status(201).json(newAccount))
-      .catch((err) => {
-        console.log(err);
-        next({ errorMessage: 'Something went wrong trying to post' });
-      });
+  async (req, res, next) => {
+    try {
+      const newAccount = await Accounts.create(req.body);
+      res.status(201).json(newAccount);
+    } catch (err) {
+      next(err);
+    }
   }
 );
+
+// router.post(
+//   '/',
+//   checkAccountPayload,
+//   checkAccountNameUnique,
+//   (req, res, next) => {
+//     // DO YOUR MAGIC
+//     Accounts.create(req.body)
+//       .then((newAccount) => res.status(201).json(newAccount))
+//       .catch((err) => {
+//         console.log(err);
+//         next({ errorMessage: 'Something went wrong trying to post' });
+//       });
+//   }
+// );
 
 router.put('/:id', checkAccountPayload, checkAccountId, (req, res, next) => {
   // DO YOUR MAGIC
